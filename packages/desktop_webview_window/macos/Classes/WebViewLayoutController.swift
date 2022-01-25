@@ -82,7 +82,6 @@ class WebViewLayoutController: NSViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
     webView.navigationDelegate = self
     webView.uiDelegate = self
 

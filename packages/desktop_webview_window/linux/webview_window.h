@@ -18,7 +18,7 @@ class WebviewWindow {
       FlMethodChannel *method_channel,
       int64_t window_id,
       std::function<void()> on_close_callback,
-      const std::string &title, int width, int height,
+      const std::string &title, int x, int y, int width, int height,
       int title_bar_height
   );
 

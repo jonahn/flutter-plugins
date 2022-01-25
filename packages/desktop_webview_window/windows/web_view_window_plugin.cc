@@ -53,6 +53,8 @@ void WebviewWindowPlugin::HandleMethodCall(
     auto *arguments = std::get_if<flutter::EncodableMap>(method_call.arguments());
     auto width = arguments->at(flutter::EncodableValue("windowWidth")).LongValue();
     auto height = arguments->at(flutter::EncodableValue("windowHeight")).LongValue();
+    auto x = arguments->at(flutter::EncodableValue("windowX")).LongValue();
+    auto y = arguments->at(flutter::EncodableValue("windowY")).LongValue();
     auto title = std::get<std::string>(arguments->at(flutter::EncodableValue("title")));
     auto titleBarHeight = arguments->at(flutter::EncodableValue("titleBarHeight")).LongValue();
     auto userDataFolder = std::get<std::string>(arguments->at(flutter::EncodableValue("userDataFolderWindows")));
@@ -65,7 +67,7 @@ void WebviewWindowPlugin::HandleMethodCall(
         });
     std::shared_ptr<flutter::MethodResult<flutter::EncodableValue>> result2(std::move(result));
     window->CreateAndShow(
-        utf8_to_wide(title), int(height), int(width), utf8_to_wide(userDataFolder),
+        utf8_to_wide(title),int(x), int(y), int(height), int(width), utf8_to_wide(userDataFolder),
         [this, window_id, result(result2)](bool succeed) mutable {
           if (!succeed) {
             result->Error("0", "failed to show window");

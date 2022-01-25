@@ -50,15 +50,15 @@ WebviewWindow::~WebviewWindow() {
   hwnd_.reset();
 }
 
-void WebviewWindow::CreateAndShow(const std::wstring &title, int height, int width,
+void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int height, int width,
                                   const std::wstring &userDataFolder,
                                   CreateCallback callback) {
 
   RegisterWindowClass(kWebViewWindowClassName, WebviewWindow::WndProc);
 
   // the same as flutter default main.cpp
-  const POINT target_point = {static_cast<LONG>(10),
-                              static_cast<LONG>(10)};
+  const POINT target_point = {static_cast<LONG>(x),
+                              static_cast<LONG>(y)};
   HMONITOR monitor = MonitorFromPoint(target_point, MONITOR_DEFAULTTONEAREST);
 
   UINT dpi = FlutterDesktopGetDpiForMonitor(monitor);

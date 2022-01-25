@@ -58,6 +58,8 @@ class _MyAppState extends State<MyApp> {
                   configuration: CreateConfiguration(
                     windowHeight: 1280,
                     windowWidth: 720,
+                    x: 100,
+                    y: 10,
                     title: "ExampleTestWindow",
                     titleBarTopPadding: Platform.isMacOS ? 20 : 0,
                     userDataFolderWindows: await _getWebViewPath(),
@@ -131,11 +133,15 @@ class _MyAppState extends State<MyApp> {
     final webview = await WebviewWindow.create(
       configuration: CreateConfiguration(
         userDataFolderWindows: await _getWebViewPath(),
-        titleBarTopPadding: Platform.isMacOS ? 20 : 0,
+        titleBarHeight: 0,
+        titleBarTopPadding: Platform.isMacOS ? 30 : 0,
+        title: "测试",
+        x: 100,
+        y: 300
       ),
     );
     webview
-      ..setBrightness(Brightness.dark)
+      ..setBrightness(Brightness.light)
       ..setApplicationNameForUserAgent("WebviewExample/1.0.0")
       ..launch(_controller.text)
       ..addOnUrlRequestCallback((url) {
@@ -164,7 +170,7 @@ class _MyAppState extends State<MyApp> {
 const _javaScriptToEval = [
   """
   function test() {
-    return;
+    return 10;
   }
   test();
   """,

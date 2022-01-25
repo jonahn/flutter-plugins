@@ -54,6 +54,8 @@ WebviewWindow::WebviewWindow(
     int64_t window_id,
     std::function<void()> on_close_callback,
     const std::string &title,
+        int x,
+        int y,
     int width,
     int height,
     int title_bar_height
@@ -78,7 +80,7 @@ WebviewWindow::WebviewWindow(
                    }), this);
   gtk_window_set_title(GTK_WINDOW(window_), title.c_str());
   gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
-  gtk_window_set_position(GTK_WINDOW(window_), GTK_WIN_POS_CENTER);
+  gtk_window_set_position(x, y);
 
   box_ = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
   gtk_container_add(GTK_CONTAINER(window_), GTK_WIDGET(box_));

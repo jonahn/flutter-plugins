@@ -14,6 +14,8 @@ class WebviewWindowController: NSWindowController {
 
   private let viewId: Int64
 
+  private let x, y: Int
+
   private let width, height: Int
 
   private let titleBarHeight: Int
@@ -26,12 +28,15 @@ class WebviewWindowController: NSWindowController {
 
   init(viewId: Int64, methodChannel: FlutterMethodChannel,
        width: Int, height: Int,
+       x: Int, y: Int,
        title: String, titleBarHeight: Int,
        titleBarTopPadding: Int) {
     self.viewId = viewId
     self.methodChannel = methodChannel
     self.width = width
     self.height = height
+    self.x = x
+    self.y = y
     self.titleBarHeight = titleBarHeight
     self.titleBarTopPadding = titleBarTopPadding
     self.title = title
@@ -48,18 +53,19 @@ class WebviewWindowController: NSWindowController {
 
   override func windowDidLoad() {
     super.windowDidLoad()
-
     contentViewController = WebViewLayoutController(
       methodChannel: methodChannel,
       viewId: viewId, titleBarHeight: titleBarHeight,
       titleBarTopPadding: titleBarTopPadding)
 
     window?.setContentSize(NSSize(width: width, height: height))
-    window?.center()
+    //window?.center()
     window?.title = title
 
     window?.isReleasedWhenClosed = false
     window?.delegate = self
+
+    window?.setFrame(NSRect(x: x, y:y, width: width, height: height), display: true);
   }
 
   override func keyDown(with event: NSEvent) {
