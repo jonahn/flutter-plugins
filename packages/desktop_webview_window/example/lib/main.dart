@@ -140,17 +140,24 @@ class _MyAppState extends State<MyApp> {
         y: 300
       ),
     );
+    Webview.openTask = (url){
+      print("bridge url = ${url}");
+      return true;
+    };
     webview
       ..setBrightness(Brightness.light)
       ..setApplicationNameForUserAgent("WebviewExample/1.0.0")
       ..launch(_controller.text)
       ..addOnUrlRequestCallback((url) {
-        debugPrint('url: $url');
+        debugPrint('--- url: $url');
         final uri = Uri.parse(url);
         if (uri.path == '/login_success') {
           debugPrint('login success. token: ${uri.queryParameters['token']}');
           webview.close();
         }
+      })
+      ..registerJavaScriptMessageHandler("RobotPen", (name, body) {
+        debugPrint('on javaScipt message: $name $body');
       })
       ..onClose.whenComplete(() {
         debugPrint("on close");

@@ -14,11 +14,19 @@ typedef OnHistoryChangedCallback = void Function(
 /// [url] is the URL string.
 typedef OnUrlRequestCallback = void Function(String url);
 
+/// WebView open a URL,if success will call OnUrlRequestCallback
+/// fail for bridge like:  window.open("js://webview?arg1=111&args2=222");
+typedef UrlOpenTask = bool Function(String url);
+
+
 abstract class Webview {
   Future<void> get onClose;
 
   ///  true if the webview is currently loading a page.
   ValueListenable<bool> get isNavigating;
+
+  // for url open call back bridge
+  static UrlOpenTask? openTask;
 
   /// Install a message handler that you can call from your Javascript code.
   ///

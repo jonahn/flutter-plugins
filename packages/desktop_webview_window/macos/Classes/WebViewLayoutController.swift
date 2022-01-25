@@ -109,7 +109,8 @@ class WebViewLayoutController: NSViewController {
     } else if keyPath == "loading" {
       if webView.isLoading {
         methodChannel.invokeMethod("onNavigationStarted", arguments: [
-          "id": viewId,
+          "url": webView.url?.absoluteString ?? "",
+          "id": viewId
         ])
       } else {
         methodChannel.invokeMethod("onNavigationCompleted", arguments: [

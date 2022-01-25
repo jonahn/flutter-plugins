@@ -139,13 +139,14 @@ void WebView::OnWebviewControllerCreated() {
   webview_->add_NavigationStarting(
       Callback<ICoreWebView2NavigationStartingEventHandler>(
           [this](ICoreWebView2 *sender, ICoreWebView2NavigationStartingEventArgs *args) {
+            LPWSTR uri;
+            args->get_Uri(&uri);
             method_channel_->InvokeMethod(
                 "onNavigationStarted",
                 std::make_unique<flutter::EncodableValue>(flutter::EncodableMap{
                     {flutter::EncodableValue("id"), flutter::EncodableValue(web_view_id_)},
+                    {flutter::EncodableValue("url"), flutter::EncodableValue(wide_to_utf8(std::wstring(uri)))},
                 }));
-            LPWSTR uri;
-            args->get_Uri(&uri);
             method_channel_->InvokeMethod(
                 "onUrlRequested",
                 std::make_unique<flutter::EncodableValue>(flutter::EncodableMap{

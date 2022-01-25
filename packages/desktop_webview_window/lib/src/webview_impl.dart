@@ -54,8 +54,13 @@ class WebviewImpl extends Webview {
     _onHistoryChanged?.call(canGoBack, canGoForward);
   }
 
-  void onNavigationStarted() {
-    _isNaivgating.value = true;
+  void onNavigationStarted(String url) {
+    if(Webview.openTask != null){
+      _isNaivgating.value = Webview.openTask!(url);
+    }
+    else{
+      _isNaivgating.value = true;
+    }
   }
 
   void notifyUrlChanged(String url) {

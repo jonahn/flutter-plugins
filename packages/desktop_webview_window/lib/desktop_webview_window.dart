@@ -132,7 +132,8 @@ class WebviewWindow {
         });
         break;
       case "onNavigationStarted":
-        webview.onNavigationStarted();
+        final url = args['url'] as String;
+        webview.onNavigationStarted(url);
         await _otherIsolateMessageHandler.invokeMethod('onNavigationStarted', {
           'webViewId': viewId,
         });
