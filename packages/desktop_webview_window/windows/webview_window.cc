@@ -66,7 +66,8 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
 
   hwnd_ = wil::unique_hwnd(::CreateWindow(
       kWebViewWindowClassName, title.c_str(),
-      WS_VISIBLE | WS_BORDER | WS_THICKFRAME,
+    WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+//      WS_VISIBLE | WS_BORDER | WS_THICKFRAME,
       CW_USEDEFAULT, CW_USEDEFAULT,
       Scale(width, scale_factor), Scale(height, scale_factor),
       nullptr, nullptr, GetModuleHandle(nullptr), this));

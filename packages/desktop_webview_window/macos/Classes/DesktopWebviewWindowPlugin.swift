@@ -43,7 +43,9 @@ public class DesktopWebviewWindowPlugin: NSObject, FlutterPlugin {
       )
       controller.webviewPlugin = self
       webviews[viewId] = controller
-      controller.showWindow(nil)
+//      controller.showWindow(controller.window)
+        let winController = NSWindowController(window: controller)
+        winController.showWindow(controller)
       result(viewId)
       viewId += 1
       break
@@ -281,8 +283,6 @@ public class DesktopWebviewWindowPlugin: NSObject, FlutterPlugin {
 
   func onWebviewWindowClose(viewId: Int64, wc: WebviewWindowController) {
     wc.destroy()
-    let wc = webviews.removeValue(forKey: viewId)
-    wc?.window?.windowController = nil
-    wc?.window = nil
+    _ = webviews.removeValue(forKey: viewId)
   }
 }

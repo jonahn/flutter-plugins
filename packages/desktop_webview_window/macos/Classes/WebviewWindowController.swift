@@ -9,23 +9,22 @@ import Cocoa
 import FlutterMacOS
 import WebKit
 
-class WebviewWindowController: NSWindowController {
-  private let methodChannel: FlutterMethodChannel
+class WebviewWindowController: NSPanel {
+  private var methodChannel: FlutterMethodChannel
 
-  private let viewId: Int64
+  private var viewId: Int64
 
-  private let x, y: Int
+  private var x, y: Int
 
-  private let width, height: Int
+  private var width, height: Int
 
-  private let titleBarHeight: Int
+  private var titleBarHeight: Int
   
-  private let titleBarTopPadding: Int
+  private var titleBarTopPadding: Int
   
-  private let title: String
+//  private let title: String
   
   public weak var webviewPlugin: DesktopWebviewWindowPlugin?
-
   init(viewId: Int64, methodChannel: FlutterMethodChannel,
        width: Int, height: Int,
        x: Int, y: Int,
@@ -39,8 +38,9 @@ class WebviewWindowController: NSWindowController {
     self.y = y
     self.titleBarHeight = titleBarHeight
     self.titleBarTopPadding = titleBarTopPadding
+      super.init(contentRect: NSRect(x: x, y:y, width: width, height: height), styleMask: NSWindow.StyleMask.init(rawValue: NSWindow.StyleMask.closable.rawValue|NSWindow.StyleMask.titled.rawValue|NSWindow.StyleMask.resizable.rawValue), backing: NSWindow.BackingStoreType.buffered, defer: true)
     self.title = title
-    super.init(window: nil)
+    setupWindow();
   }
 
   required init?(coder: NSCoder) {
@@ -51,21 +51,14 @@ class WebviewWindowController: NSWindowController {
     contentViewController as! WebViewLayoutController
   }
 
-  override func windowDidLoad() {
-    super.windowDidLoad()
+  func setupWindow() {
     contentViewController = WebViewLayoutController(
       methodChannel: methodChannel,
       viewId: viewId, titleBarHeight: titleBarHeight,
       titleBarTopPadding: titleBarTopPadding)
 
-    window?.setContentSize(NSSize(width: width, height: height))
-    //window?.center()
-    window?.title = title
-
-    window?.isReleasedWhenClosed = false
-    window?.delegate = self
-
-    window?.setFrame(NSRect(x: x, y:y, width: width, height: height), display: true);
+    self.isReleasedWhenClosed = false
+    self.delegate = self
   }
 
   override func keyDown(with event: NSEvent) {
@@ -75,7 +68,7 @@ class WebviewWindowController: NSWindowController {
   }
 
   func destroy() {
-    window?.delegate = nil
+    self.delegate = nil
     contentViewController = nil
   }
 
@@ -83,16 +76,16 @@ class WebviewWindowController: NSWindowController {
     switch brightness {
     case 0:
       if #available(macOS 10.14, *) {
-        window?.appearance = NSAppearance(named: .darkAqua)
+        self.appearance = NSAppearance(named: .darkAqua)
       } else {
         // Fallback on earlier versions
       }
       break
     case 1:
-      window?.appearance = NSAppearance(named: .aqua)
+        self.appearance = NSAppearance(named: .aqua)
       break
     default:
-      window?.appearance = nil
+        self.appearance = nil
       break
     }
   }
@@ -101,10 +94,6 @@ class WebviewWindowController: NSWindowController {
     #if DEBUG
       print("\(self) deinited")
     #endif
-  }
-
-  override var windowNibName: NSNib.Name? {
-    "WebviewWindowController"
   }
 }
 
