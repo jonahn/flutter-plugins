@@ -91,6 +91,7 @@ class WebViewLayoutController: NSViewController {
     webView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
     webView.configuration.allowsAirPlayForMediaPlayback = true
     webView.configuration.mediaTypesRequiringUserActionForPlayback = .video
+    webView.configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
 
     webView.addObserver(self, forKeyPath: "canGoBack", options: .new, context: nil)
     webView.addObserver(self, forKeyPath: "canGoForward", options: .new, context: nil)
