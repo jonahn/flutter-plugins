@@ -46,6 +46,7 @@ public class DesktopWebviewWindowPlugin: NSObject, FlutterPlugin {
 //      controller.showWindow(controller.window)
         let winController = NSWindowController(window: controller)
         winController.showWindow(controller)
+                winController.window?.setFrame(NSRect(x: x, y:y, width: width, height: height), display: true)
       result(viewId)
       viewId += 1
       break
