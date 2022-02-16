@@ -10,12 +10,11 @@ import FlutterMacOS
 import WebKit
 
 class WebViewLayoutController: NSViewController {
-  private lazy var titleBarController: FlutterViewController = {
-    let project = FlutterDartProject()
-    project.dartEntrypointArguments = ["web_view_title_bar", "\(viewId)", "\(titleBarTopPadding)"]
-    return FlutterViewController(project: project)
-  }()
-
+//  private lazy var titleBarController: FlutterViewController = {
+//    let project = FlutterDartProject()
+//    project.dartEntrypointArguments = ["web_view_title_bar", "\(viewId)", "\(titleBarTopPadding)"]
+//    return FlutterViewController(project: project)
+//  }()
   private lazy var webView: WKWebView = {
     WKWebView()
   }()
@@ -49,31 +48,31 @@ class WebViewLayoutController: NSViewController {
   override func loadView() {
     super.loadView()
 
-    addChild(titleBarController)
-    titleBarController.view.translatesAutoresizingMaskIntoConstraints = false
+//    addChild(titleBarController)
+//    titleBarController.view.translatesAutoresizingMaskIntoConstraints = false
 
     // Register titlebar plugins
-    ClientMessageChannelPlugin.register(with: titleBarController.registrar(forPlugin: "DesktopWebviewWindowPlugin"))
+//    ClientMessageChannelPlugin.register(with: titleBarController.registrar(forPlugin: "DesktopWebviewWindowPlugin"))
 
-    let flutterView = titleBarController.view
+//    let flutterView = titleBarController.view
 
-    flutterView.translatesAutoresizingMaskIntoConstraints = false
+//    flutterView.translatesAutoresizingMaskIntoConstraints = false
 
-    view.addSubview(flutterView)
+//    view.addSubview(flutterView)
+      
+//    let constraints = [
+//        titleLabel.topAnchor.constraint(equalTo: view.topAnchor),
+//        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//        titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//        titleLabel.heightAnchor.constraint(equalToConstant: CGFloat(titleBarHeight + titleBarTopPadding)),
+//    ]
 
-    let constraints = [
-      flutterView.topAnchor.constraint(equalTo: view.topAnchor),
-      flutterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      flutterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-      flutterView.heightAnchor.constraint(equalToConstant: CGFloat(titleBarHeight + titleBarTopPadding)),
-    ]
-
-    NSLayoutConstraint.activate(constraints)
+//    NSLayoutConstraint.activate(constraints)
 
     view.addSubview(webView)
     webView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
-      webView.topAnchor.constraint(equalTo: flutterView.bottomAnchor),
+      webView.topAnchor.constraint(equalTo: view.topAnchor),
       webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
       webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
