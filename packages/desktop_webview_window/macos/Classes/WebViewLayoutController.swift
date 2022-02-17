@@ -91,9 +91,6 @@ class WebViewLayoutController: NSViewController {
     webView.configuration.allowsAirPlayForMediaPlayback = true
     webView.configuration.mediaTypesRequiringUserActionForPlayback = .video
     webView.configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-    if #available(iOS 10.0, *) {
-        webView.configuration.preferences.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
-    }
     webView.addObserver(self, forKeyPath: "canGoBack", options: .new, context: nil)
     webView.addObserver(self, forKeyPath: "canGoForward", options: .new, context: nil)
     webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
