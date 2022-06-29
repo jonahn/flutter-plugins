@@ -166,11 +166,11 @@ void WebviewWindow::OnLoadChanged(WebKitLoadEvent load_event) {
   // notify load start/finished event.
   switch (load_event) {
     case WEBKIT_LOAD_STARTED: {
-      auto *args = fl_value_new_map();
-      fl_value_set(args, fl_value_new_string("id"), fl_value_new_int(window_id_));
-      fl_method_channel_invoke_method(
-          FL_METHOD_CHANNEL(method_channel_), "onNavigationStarted", args,
-          nullptr, nullptr, nullptr);
+      // auto *args = fl_value_new_map();
+      // fl_value_set(args, fl_value_new_string("id"), fl_value_new_int(window_id_));
+      // fl_method_channel_invoke_method(
+      //     FL_METHOD_CHANNEL(method_channel_), "onNavigationStarted", args,
+      //     nullptr, nullptr, nullptr);
       break;
     }
     case WEBKIT_LOAD_FINISHED: {
@@ -211,6 +211,9 @@ gboolean WebviewWindow::DecidePolicy(WebKitPolicyDecision *decision, WebKitPolic
     auto *args = fl_value_new_map();
     fl_value_set(args, fl_value_new_string("id"), fl_value_new_int(window_id_));
     fl_value_set(args, fl_value_new_string("url"), fl_value_new_string(uri));
+    fl_method_channel_invoke_method(
+      FL_METHOD_CHANNEL(method_channel_), "onNavigationStarted", args,
+        nullptr, nullptr, nullptr);
     fl_method_channel_invoke_method(
         FL_METHOD_CHANNEL(method_channel_), "onUrlRequested", args,
         nullptr, nullptr, nullptr);
