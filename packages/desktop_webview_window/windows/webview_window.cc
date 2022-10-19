@@ -80,8 +80,17 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
   RECT rc;
   GetClientRect(hwnd_.get(), &rc);
   ClipOrCenterRectToMonitor(&rc, MONITOR_CENTER);
-  SetWindowPos(hwnd_.get(), nullptr, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-
+  DWORD dwForeID = 0;
+  DWORD dwCurID = 0;
+  dwCurID = GetCurrentThreadId();
+  dwForeID = GetWindowThreadProcessId(hwnd_.get(), NULL);
+  AttachThreadInput(dwCurID, dwForeID, TRUE);
+  ShowWindow(hwnd_.get(), SW_SHOWNORMAL);
+  SetWindowPos(hwnd_.get(), HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+  SetWindowPos(hwnd_.get(), HWND_NOTOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+  SetForegroundWindow(hwnd_.get());
+  AttachThreadInput(dwCurID, dwForeID, FALSE);
+  SetWindowPos(hwnd_.get(), HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
   auto title_bar_height = Scale(title_bar_height_, scale_factor);
 
   // Create the browser view.
@@ -113,7 +122,7 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
 
   assert(hwnd_ != nullptr);
 
-  ShowWindow(hwnd_.get(), SW_SHOW);
+  //ShowWindow(hwnd_.get(), SW_SHOW);
   UpdateWindow(hwnd_.get());
 
 }
