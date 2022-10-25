@@ -58,14 +58,14 @@ class WebviewWindow {
     return web_view_;
   }
 
+  wil::unique_hwnd hwnd_;
+
  private:
 
   // Retrieves a class instance pointer for |window|
   static WebviewWindow *GetThisFromHandle(HWND window) noexcept;
 
   MethodChannelPtr method_channel_;
-
-  wil::unique_hwnd hwnd_;
 
   int64_t window_id_;
 
