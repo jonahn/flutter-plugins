@@ -42,6 +42,23 @@ WebviewWindowPlugin::WebviewWindowPlugin(MethodChannelPtr method_channel)
 
 WebviewWindowPlugin::~WebviewWindowPlugin() = default;
 
+void WebviewWindowPlugin::Minimize(HWND hWnd) {
+  WINDOWPLACEMENT windowPlacement;
+  GetWindowPlacement(hWnd, &windowPlacement);
+
+  if (windowPlacement.showCmd != SW_SHOWMINIMIZED) {
+    PostMessage(hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+  }
+}
+void WebviewWindowPlugin::Restore(HWND hWnd) {
+  WINDOWPLACEMENT windowPlacement;
+  GetWindowPlacement(hWnd, &windowPlacement);
+
+  if (windowPlacement.showCmd != SW_NORMAL) {
+    PostMessage(hWnd, WM_SYSCOMMAND, SC_RESTORE, 0);
+  }
+}
+
 void WebviewWindowPlugin::HandleMethodCall(
     const flutter::MethodCall<flutter::EncodableValue> &method_call,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
@@ -207,7 +224,26 @@ void WebviewWindowPlugin::HandleMethodCall(
       return;
     }
     windows_[window_id]->GetWebView()->ExecuteJavaScript(utf8_to_wide(javascript), std::move(result));
-  } else {
+  }
+  else if (method_call.method_name() == "minimize") {
+       auto *arguments = std::get_if<flutter::EncodableMap>(method_call.arguments());
+       auto window_id = arguments->at(flutter::EncodableValue("viewId")).LongValue();
+       if (!windows_.count(window_id)) {
+         result->Error("0", "can not find webview window for id");
+         return;
+       }
+       Minimize(windows_[window_id]->hwnd_.get());
+     }
+     else if (method_call.method_name() == "restore") {
+       auto *arguments = std::get_if<flutter::EncodableMap>(method_call.arguments());
+       auto window_id = arguments->at(flutter::EncodableValue("viewId")).LongValue();
+       if (!windows_.count(window_id)) {
+         result->Error("0", "can not find webview window for id");
+         return;
+       }
+       Restore(windows_[window_id]->hwnd_.get());
+     }
+   else {
     result->NotImplemented();
   }
 }

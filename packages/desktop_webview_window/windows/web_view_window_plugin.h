@@ -35,6 +35,9 @@ class WebviewWindowPlugin: public flutter::Plugin {
 
   std::map<int64_t, std::unique_ptr<WebviewWindow>> windows_;
 
+  void Minimize(HWND hWnd);
+
+  void Restore(HWND hWnd);
 };
 
 #endif //DESKTOP_WEBVIEW_WINDOW_WINDOWS_WEB_VIEW_PLUGIN_H_

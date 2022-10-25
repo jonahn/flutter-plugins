@@ -65,6 +65,11 @@ abstract class Webview {
   /// Stop all navigations and pending resource fetches.
   Future<void> stop();
 
+//最小化  只实现了windows
+  Future<void> minimize();
+//最小化还原 只实现了windows
+  Future<void> restore();
+
   /// Register a callback that will be invoked when the webview history changes.
   void setOnHistoryChangedCallback(OnHistoryChangedCallback? callback);
 

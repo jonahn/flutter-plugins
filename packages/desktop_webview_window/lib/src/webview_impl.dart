@@ -183,6 +183,16 @@ class WebviewImpl extends Webview {
   }
 
   @override
+  Future<void> minimize() {
+    return channel.invokeMethod("minimize", {"viewId": viewId});
+  }
+
+  @override
+  Future<void> restore() {
+    return channel.invokeMethod("restore", {"viewId": viewId});
+  }
+
+  @override
   void setOnHistoryChangedCallback(OnHistoryChangedCallback? callback) {
     _onHistoryChanged = callback;
   }

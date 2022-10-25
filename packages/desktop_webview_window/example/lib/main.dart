@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   );
 
   bool? _webviewAvailable;
-
+  Webview? _webview;
   @override
   void initState() {
     super.initState();
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           actions: [
             IconButton(
               onPressed: () async {
-                final webview = await WebviewWindow.create(
+                Webview webview = await WebviewWindow.create(
                   configuration: CreateConfiguration(
                     windowHeight: 1280,
                     windowWidth: 720,
@@ -93,6 +93,7 @@ class _MyAppState extends State<MyApp> {
   }
 """)
                   ..launch("http://localhost:3000/test.html");
+                _webview = webview;
               },
               icon: const Icon(Icons.bug_report),
             )
@@ -120,7 +121,15 @@ class _MyAppState extends State<MyApp> {
                     debugPrint('clear complete');
                   },
                   child: const Text('Clear all'),
-                )
+                ),
+                const SizedBox(height: 20,),
+                TextButton(onPressed: (){
+                  _webview?.minimize();
+                }, child: const Text("minimize")),
+                const SizedBox(height: 20,),
+                TextButton(onPressed: (){
+                  _webview?.restore();
+                }, child: const Text("restore"))
               ],
             ),
           ),
@@ -130,7 +139,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _onTap() async {
-    final webview = await WebviewWindow.create(
+     Webview webview = await WebviewWindow.create(
       configuration: CreateConfiguration(
         userDataFolderWindows: await _getWebViewPath(),
         titleBarHeight: 0,
@@ -144,6 +153,7 @@ class _MyAppState extends State<MyApp> {
       print("bridge url = ${url}");
       return true;
     };
+    _webview = webview;
     webview
       ..setBrightness(Brightness.light)
       ..setApplicationNameForUserAgent("WebviewExample/1.0.0")
