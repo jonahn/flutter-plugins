@@ -31,6 +31,9 @@ class WebviewImpl extends Webview {
   @override
   Future<void> get onClose => _closeCompleter.future;
 
+  @override
+  int get webId => viewId;
+
   void onClosed() {
     _closed = true;
     _closeCompleter.complete();

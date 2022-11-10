@@ -21,6 +21,9 @@ typedef UrlOpenTask = bool Function(String url);
 typedef UrlOpenTask2 = bool Function(int viewId ,String url);
 
 abstract class Webview {
+
+  int get webId;
+
   Future<void> get onClose;
 
   ///  true if the webview is currently loading a page.
@@ -28,7 +31,7 @@ abstract class Webview {
 
   // for url open call back bridge
   static UrlOpenTask? openTask;
-  
+
   static UrlOpenTask2? openTask2;
 
   /// Install a message handler that you can call from your Javascript code.
