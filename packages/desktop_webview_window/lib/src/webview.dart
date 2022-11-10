@@ -18,6 +18,7 @@ typedef OnUrlRequestCallback = void Function(String url);
 /// fail for bridge like:  window.open("js://webview?arg1=111&args2=222");
 typedef UrlOpenTask = bool Function(String url);
 
+typedef UrlOpenTask2 = bool Function(int viewId ,String url);
 
 abstract class Webview {
   Future<void> get onClose;
@@ -27,6 +28,8 @@ abstract class Webview {
 
   // for url open call back bridge
   static UrlOpenTask? openTask;
+  
+  static UrlOpenTask2? openTask2;
 
   /// Install a message handler that you can call from your Javascript code.
   ///
