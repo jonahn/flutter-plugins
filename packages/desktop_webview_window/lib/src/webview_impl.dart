@@ -55,10 +55,11 @@ class WebviewImpl extends Webview {
   }
 
   void onNavigationStarted(String url) {
-    if(Webview.openTask != null){
+    if (Webview.openTask != null) {
       _isNaivgating.value = Webview.openTask!(url);
-    }
-    else{
+    } else if (Webview.openTask2 != null) {
+      _isNaivgating.value = Webview.openTask2!(viewId, url);
+    } else {
       _isNaivgating.value = true;
     }
   }
