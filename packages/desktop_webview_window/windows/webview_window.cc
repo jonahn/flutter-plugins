@@ -50,7 +50,7 @@ WebviewWindow::~WebviewWindow() {
   hwnd_.reset();
 }
 
-void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int height, int width,
+void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int height, int width, int fullScreen,
                                   const std::wstring &userDataFolder,
                                   CreateCallback callback) {
 
@@ -66,8 +66,7 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
 
   hwnd_ = wil::unique_hwnd(::CreateWindow(
       kWebViewWindowClassName, title.c_str(),
-    WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-//      WS_VISIBLE | WS_BORDER | WS_THICKFRAME,
+      WS_OVERLAPPEDWINDOW | WS_VISIBLE,
       CW_USEDEFAULT, CW_USEDEFAULT,
       Scale(width, scale_factor), Scale(height, scale_factor),
       nullptr, nullptr, GetModuleHandle(nullptr), this));
@@ -80,19 +79,34 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
   RECT rc;
   GetClientRect(hwnd_.get(), &rc);
   ClipOrCenterRectToMonitor(&rc, MONITOR_CENTER);
+
   DWORD dwForeID = 0;
   DWORD dwCurID = 0;
   dwCurID = GetCurrentThreadId();
   dwForeID = GetWindowThreadProcessId(hwnd_.get(), NULL);
   AttachThreadInput(dwCurID, dwForeID, TRUE);
-  ShowWindow(hwnd_.get(), SW_SHOWNORMAL);
-  SetWindowPos(hwnd_.get(), HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-  SetWindowPos(hwnd_.get(), HWND_NOTOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+  if(fullScreen){
+
+  }
+  else{
+    ShowWindow(hwnd_.get(), SW_SHOWNORMAL);
+    SetWindowPos(hwnd_.get(), HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+    SetWindowPos(hwnd_.get(), HWND_NOTOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+  }
+
   SetForegroundWindow(hwnd_.get());
   AttachThreadInput(dwCurID, dwForeID, FALSE);
-  SetWindowPos(hwnd_.get(), HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+  if(fullScreen){
+    int w = GetSystemMetrics(SM_CXSCREEN);
+    int h = GetSystemMetrics(SM_CYSCREEN);
+    SetWindowLongPtr(hwnd_.get(), GWL_STYLE, WS_VISIBLE | WS_POPUP);
+    SetWindowPos(hwnd_.get(), NULL, 0, 0, w, h, SWP_FRAMECHANGED);
+  }
+  else{
+    SetWindowPos(hwnd_.get(), HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+  }
+  
   auto title_bar_height = Scale(title_bar_height_, scale_factor);
-
   // Create the browser view.
   web_view_ = std::make_unique<webview_window::WebView>(
       method_channel_, window_id_, userDataFolder,
@@ -119,12 +133,9 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
   SetParent(title_bar_handle, hwnd_.get());
   MoveWindow(title_bar_handle, 0, 0, rc.right - rc.left, title_bar_height, true);
   ShowWindow(title_bar_handle, SW_SHOW);
-
   assert(hwnd_ != nullptr);
 
-  //ShowWindow(hwnd_.get(), SW_SHOW);
   UpdateWindow(hwnd_.get());
-
 }
 
 void WebviewWindow::SetBrightness(int brightness) {

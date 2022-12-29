@@ -38,7 +38,7 @@ class WebviewWindow {
 
   using CreateCallback = std::function<void(bool success)>;
 
-  void CreateAndShow(const std::wstring &title,int x, int y, int height, int width,
+  void CreateAndShow(const std::wstring &title,int x, int y, int height, int width, int fullScreen,
                      const std::wstring &userDataFolder,
                      CreateCallback callback);
 
@@ -66,6 +66,7 @@ class WebviewWindow {
   static WebviewWindow *GetThisFromHandle(HWND window) noexcept;
 
   MethodChannelPtr method_channel_;
+
 
   int64_t window_id_;
 

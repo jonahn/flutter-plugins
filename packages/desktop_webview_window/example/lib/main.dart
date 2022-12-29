@@ -146,7 +146,8 @@ class _MyAppState extends State<MyApp> {
         titleBarTopPadding: Platform.isMacOS ? 30 : 0,
         title: "测试",
         x: 100,
-        y: 300
+        y: 300,
+        fullScreen: 1
       ),
     );
     Webview.openTask = (url){
