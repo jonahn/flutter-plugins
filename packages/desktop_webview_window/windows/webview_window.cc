@@ -96,9 +96,9 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
 
   SetForegroundWindow(hwnd_.get());
   AttachThreadInput(dwCurID, dwForeID, FALSE);
+  int w = GetSystemMetrics(SM_CXSCREEN);
+  int h = GetSystemMetrics(SM_CYSCREEN);
   if(fullScreen){
-    int w = GetSystemMetrics(SM_CXSCREEN);
-    int h = GetSystemMetrics(SM_CYSCREEN);
     SetWindowLongPtr(hwnd_.get(), GWL_STYLE, WS_VISIBLE | WS_POPUP);
     SetWindowPos(hwnd_.get(), NULL, 0, 0, w, h, SWP_FRAMECHANGED);
   }
@@ -120,10 +120,18 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
 
   auto web_view_handle = web_view_->NativeWindow().get();
   SetParent(web_view_handle, hwnd_.get());
-  MoveWindow(web_view_handle, 0, title_bar_height,
+  if(fullScreen){
+    MoveWindow(web_view_handle, 0, 0,
+             w,
+             h,
+             true);
+  }
+  else {
+    MoveWindow(web_view_handle, 0, title_bar_height,
              rc.right - rc.left,
              rc.bottom - rc.top - title_bar_height,
              true);
+  }
   ShowWindow(web_view_handle, SW_SHOW);
 
   // Create the title bar view.
