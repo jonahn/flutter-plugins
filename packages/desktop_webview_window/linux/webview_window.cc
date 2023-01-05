@@ -80,7 +80,6 @@ WebviewWindow::WebviewWindow(
                    }), this);
   gtk_window_set_title(GTK_WINDOW(window_), title.c_str());
   gtk_window_set_default_size(GTK_WINDOW(window_), width, height);
-  gtk_window_set_position(x, y);
 
   box_ = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
   gtk_container_add(GTK_CONTAINER(window_), GTK_WIDGET(box_));
