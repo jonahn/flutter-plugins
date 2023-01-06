@@ -52,6 +52,12 @@ WebviewWindow::~WebviewWindow()
   hwnd_.reset();
 }
 
+void CALLBACK WebViewTimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime){
+  KillTimer(hWnd,nTimerid);
+	HMENU hmenu = ::GetSystemMenu(hWnd, false);
+	EnableMenuItem(hmenu, SC_CLOSE, MF_ENABLED);
+}
+
 void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int height, int width, int fullScreen,
                                   const std::wstring &userDataFolder,
                                   CreateCallback callback)
@@ -94,7 +100,9 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
     callback(false);
     return;
   }
-
+  
+	 HMENU hmenu = ::GetSystemMenu(hwnd_.get(), false);
+	 EnableMenuItem(hmenu, SC_CLOSE, MF_DISABLED);
   // Centered window on screen.
   RECT rc;
   GetClientRect(hwnd_.get(), &rc);
@@ -179,7 +187,10 @@ void WebviewWindow::CreateAndShow(const std::wstring &title, int x, int y, int h
   assert(hwnd_ != nullptr);
 
   UpdateWindow(hwnd_.get());
+
+  SetTimer(hwnd_.get(),1,2500,(TIMERPROC)WebViewTimerProc);
 }
+
 
 void WebviewWindow::SetBrightness(int brightness)
 {
