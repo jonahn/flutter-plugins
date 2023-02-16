@@ -235,6 +235,7 @@ void WebviewWindowPlugin::HandleMethodCall(
       return;
     }
     Minimize(windows_[window_id]->hwnd_.get());
+    result->Success();
   }
   else if (method_call.method_name() == "restore") {
     auto *arguments = std::get_if<flutter::EncodableMap>(method_call.arguments());
@@ -244,6 +245,7 @@ void WebviewWindowPlugin::HandleMethodCall(
       return;
     }
     Restore(windows_[window_id]->hwnd_.get());
+    result->Success();
   }
    else {
     result->NotImplemented();
